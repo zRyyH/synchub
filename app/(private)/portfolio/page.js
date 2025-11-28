@@ -1,9 +1,9 @@
 "use client";
 
-export default function Library() {
+export default function Portfolio() {
     return (
         <div className="gap-4 flex flex-col animate-fadeSlideIn">
-            <p>Library</p>
+            <p>Portfolio</p>
         </div>
     );
 }

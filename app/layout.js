@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Rodrigo Abadi",
+  title: "SyncHub",
   description: "by zRyyH",
 };
 
