@@ -1,16 +1,24 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { PlayCircle, Headphones, DollarSign, Lightbulb, ExternalLink, Music, Send, Target, ArrowRight } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery } from '@tanstack/react-query'
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { userService } from "@/services/user";
+
 
 export default function Dashboard() {
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['user'],
+        queryFn: userService.getMe(),
+    })
+
     return (
         <div className="max-w-7xl mx-auto space-y-6 animate-fadeSlideIn">
             {/* Header */}
             <div className="space-y-2">
-                <h1 className="text-4xl text-white font-bold">Olá, Ryan!</h1>
+                <h1 className="text-4xl text-white font-bold">Olá, { }!</h1>
                 <p className="text-gray-400">
                     Este é o seu centro de comando. Visualize suas estatísticas, gerencie suas músicas
                     e encontre novas oportunidades.
@@ -94,7 +102,7 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="text-5xl font-bold text-yellow-500">
-                        R$ 1.000,00
+                        {"R$ 0,00"}
                     </div>
 
                     <div className="space-y-3">

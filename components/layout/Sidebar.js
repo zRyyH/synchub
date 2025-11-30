@@ -6,8 +6,17 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { userService } from "@/services/user";
+import { useQuery } from '@tanstack/react-query'
 
 export default function SyncHubSidebar() {
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['user'],
+        queryFn: userService.getMe(),
+    })
+
+    console.log(data)
+
     const router = useRouter()
     const pathname = usePathname()
 
@@ -122,7 +131,7 @@ export default function SyncHubSidebar() {
             <div className="border-t border-gray-800">
                 <div className="p-4">
                     <div className="mb-3">
-                        <p className="text-sm font-medium text-white">Ryan Carlos Gadelha</p>
+                        <p className="text-sm font-medium text-white">{data?.id}</p>
                         <p className="text-xs text-gray-400">ryan-carlos-gadelha</p>
                     </div>
                     <Button

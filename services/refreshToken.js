@@ -12,6 +12,8 @@ export const refreshTokenService = async () => {
     // Busca o refresh token armazenado através do método getRefreshToken do tokenStorage
     const refreshToken = tokenStorage.getRefreshToken();
 
+    console.log(refreshToken, "refresh1")
+
     // Verifica se o refreshToken existe; caso não exista (null, undefined, ou string vazia)
     if (!refreshToken) {
         // Lança um erro informando que não há refresh token disponível, interrompendo a execução
