@@ -16,7 +16,10 @@
         ".env": true,
         "**/*.tsx": true,
         "public": true,
-        "**/*.ico": true
+        "**/*.ico": true,
+        "node_modules": true,
+        ".vscode": true,
+        ".next": true
     },
     "explorerExclude.backup": {}
 }
