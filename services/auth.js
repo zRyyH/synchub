@@ -14,8 +14,6 @@ export const authService = {
         // Desestrutura a resposta para extrair os tokens de acesso e atualização
         const { access_token, refresh_token } = response.data.data;
 
-        console.log(access_token, refresh_token)
-
         // Armazena os tokens (geralmente no localStorage ou sessionStorage) usando o tokenStorage
         tokenStorage.setTokens(access_token, refresh_token);
 

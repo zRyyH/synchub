@@ -15,8 +15,6 @@ export default function SyncHubSidebar() {
         queryFn: userService.getMe(),
     })
 
-    console.log(data)
-
     const router = useRouter()
     const pathname = usePathname()
 
@@ -131,8 +129,8 @@ export default function SyncHubSidebar() {
             <div className="border-t border-gray-800">
                 <div className="p-4">
                     <div className="mb-3">
-                        <p className="text-sm font-medium text-white">{data?.id}</p>
-                        <p className="text-xs text-gray-400">ryan-carlos-gadelha</p>
+                        <p className="text-sm font-medium text-white">{`${data?.first_name} ${data?.last_name}`}</p>
+                        <p className="text-xs text-gray-400">{data?.email}</p>
                     </div>
                     <Button
                         variant="ghost"

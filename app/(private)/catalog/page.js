@@ -1,15 +1,34 @@
 "use client";
 
-import { useState } from "react";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
-import { Music } from "lucide-react";
+import { CatalogMusic } from "@/components/pages/catalog/Catalog";
+import { EmptyCatalog } from "@/components/pages/catalog/Empty";
+import { NewTrackForm } from "@/components/forms/Catalog";
+import { catalogService } from "@/services/catalog";
+import { useQuery } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { CatalogMusic } from "@/components/common/Catalog";
-import AddTrackModal from "@/components/common/Modal";
+import { useState } from "react";
+
 
 export default function Catalog() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingTrack, setEditingTrack] = useState(null);
+
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['catalog'],
+        queryFn: catalogService.getCatalog,
+    })
+
+    const handleEdit = (track) => {
+        setEditingTrack(track);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = (open) => {
+        setIsModalOpen(open);
+        if (!open) {
+            setEditingTrack(null);
+        }
+    };
 
     return (
         <div className="flex flex-col animate-fadeSlideIn gap-6">
@@ -30,44 +49,34 @@ export default function Catalog() {
                 </Button>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
-                <CatalogMusic />
-                <CatalogMusic />
-                <CatalogMusic />
-            </div>
+            {data?.length > 0 ? (
+                <div className="grid grid-cols-2 gap-6">
+                    {data.map((track) => (
+                        <CatalogMusic
+                            key={track.id}
+                            id={track.id}
+                            title={track.title}
+                            genre={track.gender}
+                            mood={track.mood}
+                            bpm={parseInt(track.bpm)}
+                            status={track.status}
+                            price={track.suggested_price}
+                            duration={`${Math.floor(parseInt(track.duration) / 60)}:${(parseInt(track.duration) % 60).toString().padStart(2, '0')}`}
+                            onViewPortfolio={() => console.log("Ver portfólio", track.id)}
+                            onCopyLink={() => console.log("Copiar link", track.id)}
+                            onEdit={() => handleEdit(track)}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <EmptyCatalog />
+            )}
 
-            {/* Empty State Card */}
-            <Card className="bg-[#1a1a1a] border-[#2a2a2a]">
-                <CardContent className="p-0">
-                    <Empty className="border-0 py-20">
-                        <EmptyHeader>
-                            <Music className="size-10 text-gray-500" />
-                            <EmptyTitle className="text-xl text-gray-300">
-                                Nenhuma obra-prima ainda
-                            </EmptyTitle>
-                            <EmptyDescription className="text-gray-500 mt-2">
-                                Adicione sua primeira obra-prima e comece a construir seu império musical.
-                            </EmptyDescription>
-                        </EmptyHeader>
-                        <EmptyContent>
-                            <Button
-                                onClick={() => setIsModalOpen(true)}
-                                className="bg-[#f59e0b] hover:bg-[#d97706] text-black font-medium px-6 h-10 rounded-md mt-6"
-                            >
-                                Adicionar Primeira Faixa
-                            </Button>
-                        </EmptyContent>
-                    </Empty>
-                </CardContent>
-            </Card>
-
-            {/* Modal de Adicionar Faixa */}
-            <AddTrackModal
+            <NewTrackForm
+                setOpen={handleCloseModal}
                 open={isModalOpen}
-                onOpenChange={setIsModalOpen}
-                title={"Faixa"}
-                description={"Adicione sua nova faixa"}
-
+                idCatalog={editingTrack?.id}
+                trackData={editingTrack}
             />
         </div>
     );

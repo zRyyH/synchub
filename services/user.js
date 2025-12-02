@@ -5,9 +5,7 @@ export const userService = {
         const { data } = await directus.get(`/users/me`);
         return data?.data
     },
-    updateGoal: async (data) => {
-        const user = getMe()
-        console.log("Hello", user)
-        return await directus.patch(`/users/${user.id}`, data);
+    updateGoal: async ({ id, goal }) => {
+        return await directus.patch(`/users/${id}`, { goal });
     },
 };
