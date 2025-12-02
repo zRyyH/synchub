@@ -1,13 +1,24 @@
 "use client";
+
+import { EmptyPitches } from "@/components/pages/pitches/empty";
+import { PitcheCard } from "@/components/pages/pitches/Pitche";
+import { NewPitch } from "@/components/forms/Pitche";
 import { Button } from "@/components/ui/button";
-import { Empty, EmptyContent, EmptyDescription, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import { PitcheCard } from "@/components/common/Pitche";
-import { Music, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { pitcheService } from '@/services/pitches';
 
 export default function Pitches() {
+    const [open, setOpen] = useState(false)
+
+    const { data: pitches, isLoading } = useQuery({
+        queryKey: ['pitches'],
+        queryFn: pitcheService.getPitche
+    })
+
     return (
         <div className="space-y-6 animate-fadeSlideIn">
-            {/* Cabeçalho da Página */}
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <h1 className="text-3xl text-white font-bold tracking-tight">Pitches</h1>
@@ -15,39 +26,26 @@ export default function Pitches() {
                         Gerencie e acompanhe todos os seus envios de pitches musicais
                     </p>
                 </div>
-                <Button className="bg-amber-500 hover:bg-amber-600 text-black font-medium">
+                <Button className="bg-amber-500 hover:bg-amber-600 text-black font-medium" onClick={() => setOpen(true)} >
                     <Plus />
                     Novo Pitch
                 </Button>
             </div>
 
-            <PitcheCard
-                title="teste 5"
-                subtitle="543654756 • zryyh.br@gmail.com"
-                sendDate="23/01/2026"
-                status="Rejeitado"
-                statusVariant="destructive"
-                notes="Sempre aqui"
-                onEdit={() => console.log('Editar')}
-                onDelete={() => console.log('Excluir')}
-            />
+            {isLoading ? (
+                <div className="text-white">Carregando...</div>
+            ) : pitches && pitches.length > 0 ? (
+                pitches.map((pitch) => (
+                    <PitcheCard
+                        key={pitch.id}
+                        pitch={pitch}
+                    />
+                ))
+            ) : (
+                <EmptyPitches />
+            )}
 
-            {/* Estado Vazio */}
-            <Empty className="min-h-[400px] border-dashed border-2 border-gray-700">
-                <EmptyContent>
-                    <EmptyMedia variant="icon" className="bg-white">
-                        <Music className="text-black" />
-                    </EmptyMedia>
-                    <EmptyTitle className="text-gray-400">Nenhum pitch encontrado</EmptyTitle>
-                    <EmptyDescription className="text-gray-500">
-                        Comece adicionando seu primeiro pitch para acompanhar seus envios.
-                    </EmptyDescription>
-                    <Button className="bg-amber-500 hover:bg-amber-600 text-black font-medium mt-4">
-                        <Plus />
-                        Adicionar Primeiro Pitch
-                    </Button>
-                </EmptyContent>
-            </Empty>
+            <NewPitch open={open} setOpen={setOpen} />
         </div>
     );
 }
