@@ -40,7 +40,7 @@ export default function Radar() {
                     ))}
                 </div>
             ) : (
-                <EmptyRadar
+                <EmptySection
                     title={"Nenhuma oportunidade encontrada"}
                     description={"Adicione briefings e oportunidades que você encontrar para organizar seus envios."}
                 />

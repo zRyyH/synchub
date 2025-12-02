@@ -63,7 +63,7 @@ export default function Mentoring() {
                     </div>
 
                     <p className="text-gray-400 leading-relaxed">
-                        Para uma análise mais precisa em diferentes contextos, experimente enviar versões de 60, 30 e 15 segundos da sua música. Se possível, envie também os "stems" (pistas separadas), como instrumental e vocal, para um feedback ainda mais detalhado sobre o arranjo e a mixagem.
+                        Para uma análise mais precisa em diferentes contextos, experimente enviar versões de 60, 30 e 15 segundos da sua música. Se possível, envie também os stems (pistas separadas), como instrumental e vocal, para um feedback ainda mais detalhado sobre o arranjo e a mixagem.
                     </p>
                 </CardContent>
             </Card>
