@@ -1,6 +1,6 @@
 "use client";
 
-import { OpportunityCard } from "@/components/common/Opportunity";
+import { OpportunityCard } from "@/components/pages/radar/opportunity";
 import { HeaderRadar } from "@/components/pages/radar/header";
 import { EmptyRadar } from "@/components/common/Empty";
 

@@ -10,7 +10,6 @@ export function HeaderRadar() {
             </h1>
             <Alert className="bg-transparent border-none p-0 max-w-3xl">
                 <AlertDescription className="text-gray-400 text-sm flex items-start gap-2">
-                    <span className="text-yellow-500 text-lg">⚠️</span>
                     <span>
                         Atualizado semanalmente: aqui você só encontra oportunidades reais e
                         ativas. As vagas vencidas são removidas automaticamente, para que você foque
