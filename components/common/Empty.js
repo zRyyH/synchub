@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { Music2 } from "lucide-react";
 
-export function EmptyRadar({ title, description }) {
+export function EmptySection({ title, description }) {
     return (
         <Card className="bg-[#18181b] border-gray-800 p-16">
             <div className="flex flex-col items-center justify-center text-center">

@@ -1,8 +1,8 @@
 "use client";
 
 import { CatalogMusic } from "@/components/pages/catalog/Catalog";
-import { EmptyCatalog } from "@/components/pages/catalog/Empty";
 import { NewTrackForm } from "@/components/forms/Catalog";
+import { EmptySection } from "@/components/common/Empty";
 import { catalogService } from "@/services/catalog";
 import { useQuery } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
@@ -69,7 +69,10 @@ export default function Catalog() {
                     ))}
                 </div>
             ) : (
-                <EmptyCatalog />
+                <EmptySection
+                    title={"Nenhuma obra-prima ainda"}
+                    description={"Adicione sua primeira obra-prima e comece a construir seu império musical."}
+                />
             )}
 
             <NewTrackForm

@@ -1,7 +1,7 @@
 "use client";
 
-import { EmptyPitches } from "@/components/pages/pitches/empty";
 import { PitcheCard } from "@/components/pages/pitches/Pitche";
+import { EmptySection } from "@/components/common/Empty";
 import { NewPitch } from "@/components/forms/Pitche";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -42,7 +42,10 @@ export default function Pitches() {
                     />
                 ))
             ) : (
-                <EmptyPitches />
+                <EmptySection
+                    title={"Nenhum pitch encontrado"}
+                    description={"Comece adicionando seu primeiro pitch para acompanhar seus envios."}
+                />
             )}
 
             <NewPitch open={open} setOpen={setOpen} />
