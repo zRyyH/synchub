@@ -13,7 +13,11 @@ export default function Statistics() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <StatisticsResults />
-                <StatisticsInsights />
+                <StatisticsInsights
+                    insights={[
+                        "Continue registrando seus envios para receber insights valiosos e acompanhar seu progresso."
+                    ]}
+                />
             </div>
         </div>
     );

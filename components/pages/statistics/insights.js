@@ -1,27 +1,35 @@
 "use client";
 
-import { Lightbulb, ChevronRight } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export function StatisticsInsights() {
+export function StatisticsInsights({
+    title = "Insights Automáticos",
+    description = "Dicas com base na sua atividade recente.",
+    insights = []
+}) {
     return (
         <Card className="bg-[#18181b] border-gray-800">
             <CardHeader>
                 <div className="flex items-center gap-2">
                     <Lightbulb className="w-5 h-5 text-yellow-500" />
-                    <CardTitle className="text-white">Insights Automáticos</CardTitle>
+                    <CardTitle className="text-white">{title}</CardTitle>
                 </div>
                 <CardDescription className="text-gray-400">
-                    Dicas com base na sua atividade recente.
+                    {description}
                 </CardDescription>
             </CardHeader>
-            <CardContent>
-                <div className="bg-[#0f0f11] border border-gray-800 rounded-lg p-4 flex items-start gap-3">
-                    <ChevronRight className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-gray-300 text-sm leading-relaxed">
-                        Continue registrando seus envios para receber insights valiosos e acompanhar seu progresso.
-                    </p>
-                </div>
+            <CardContent className="space-y-3">
+                {insights.map((insight, index) => (
+                    <Alert
+                        key={index}
+                        className="bg-[#0f0f11] border-gray-800 text-gray-300"
+                    >
+                        <Lightbulb className="h-4 w-4 text-yellow-500" />
+                        <AlertDescription>{insight}</AlertDescription>
+                    </Alert>
+                ))}
             </CardContent>
         </Card>
     );
