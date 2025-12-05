@@ -8,6 +8,7 @@ import { Plus } from "lucide-react";
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { pitcheService } from '@/services/pitches';
+import { SectionHeader } from "@/components/common/Header";
 
 export default function Pitches() {
     const [open, setOpen] = useState(false)
@@ -19,18 +20,12 @@ export default function Pitches() {
 
     return (
         <div className="space-y-6 animate-fadeSlideIn">
-            <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-3xl text-white font-bold tracking-tight">Pitches</h1>
-                    <p className="text-muted-foreground">
-                        Gerencie e acompanhe todos os seus envios de pitches musicais
-                    </p>
-                </div>
-                <Button className="bg-amber-500 hover:bg-amber-600 text-black font-medium" onClick={() => setOpen(true)} >
-                    <Plus />
-                    Novo Pitch
-                </Button>
-            </div>
+            <SectionHeader
+                title="Pitches"
+                description="Gerencie e acompanhe todos os seus envios de pitches musicais."
+                buttonText="Adicionar Pitche"
+                onButtonClick={() => setOpen(true)}
+            />
 
             {isLoading ? (
                 <div className="text-white">Carregando...</div>

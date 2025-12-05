@@ -3,6 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Upload, Lightbulb, Sparkles } from "lucide-react";
+import { SectionHeader } from "@/components/common/Header";
 
 export default function Mentoring() {
     return (

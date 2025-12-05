@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FileTextIcon, DownloadIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { synchubService } from "@/services/synchub";
+import { SectionHeader } from "@/components/common/Header";
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL || "http://localhost:8055";
 
@@ -44,23 +45,12 @@ export default function Library() {
     return (
         <div className="min-h-screen">
             <div className="max-w-7xl mx-auto">
-                {/* Cabeçalho */}
-                <div className="mb-12">
-                    <h1 className="text-4xl font-bold text-white mb-4">
-                        Biblioteca de Recursos
-                    </h1>
-                    <p className="text-gray-400 text-lg max-w-3xl leading-relaxed">
-                        Acesse materiais exclusivos que vão acelerar suas vendas e profissionalizar sua
-                        carreira. Encontre modelos de contrato, templates de pitch, checklists e guias
-                        práticos, sempre atualizados para ajudar você a fechar mais licenciamentos.
-                    </p>
-                    <p className="text-gray-400 text-sm mt-2">
-                        (TODOS OS MESES ATUALIZAMOS OS MATERIAIS AQUI, COM NOVAS TENDÊNCIAS)
-                    </p>
-                </div>
+                <SectionHeader
+                    title="Biblioteca de Recursos"
+                    description="Acesse materiais exclusivos que vão acelerar suas vendas e profissionalizar sua carreira."
+                />
 
-                {/* Grid de Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-5">
                     {resources.map((resource, index) => (
                         <Card
                             key={index}

@@ -7,6 +7,7 @@ import { VideoLink } from "@/components/pages/dashboard/videoLink";
 import { GoalSection } from "@/components/pages/dashboard/goal";
 import { useQuery } from '@tanstack/react-query';
 import { userService } from "@/services/user";
+import { SectionHeader } from "@/components/common/Header";
 
 export default function Dashboard() {
     const { data, isLoading, error } = useQuery({
@@ -16,14 +17,10 @@ export default function Dashboard() {
 
     return (
         <div className="max-w-7xl mx-auto space-y-6 animate-fadeSlideIn">
-            {/* Header */}
-            <div className="space-y-2">
-                <h1 className="text-4xl text-white font-bold">Olá, {data?.first_name}!</h1>
-                <p className="text-gray-400">
-                    Este é o seu centro de comando. Visualize suas estatísticas, gerencie suas músicas
-                    e encontre novas oportunidades.
-                </p>
-            </div>
+            <SectionHeader
+                title="Meu Dashboard"
+                description="Veja suas métricas"
+            />
 
             <VideoLink />
             <MentoringSection />

@@ -1,10 +1,10 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { OpportunityCard } from "@/components/pages/radar/opportunity";
-import { HeaderRadar } from "@/components/pages/radar/header";
-import { EmptySection } from "@/components/common/Empty";
 import { opportunityService } from "@/services/opportunity";
+import { SectionHeader } from "@/components/common/Header";
+import { EmptySection } from "@/components/common/Empty";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Radar() {
     const { data: opportunities, isLoading } = useQuery({
@@ -19,7 +19,10 @@ export default function Radar() {
 
     return (
         <div className="flex flex-col gap-12 animate-fadeSlideIn">
-            <HeaderRadar />
+            <SectionHeader
+                title="Radar de Oportunidades"
+                description="Atualizado semanalmente: aqui você só encontra oportunidades reais e ativas. As vagas vencidas são removidas automaticamente, para que você foque apenas no que pode enviar agora."
+            />
 
             {isLoading ? (
                 <div>Carregando...</div>

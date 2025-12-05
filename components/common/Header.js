@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-export function StatisticsHeader({
+export function SectionHeader({
     title = "Estatísticas Avançadas",
     description = "Analise seu desempenho com métricas detalhadas sobre envios, resultados e engajamento.",
     buttonText,
