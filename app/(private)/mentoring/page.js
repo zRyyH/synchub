@@ -1,13 +1,12 @@
 "use client";
 
+import { Upload, Lightbulb, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Upload, Lightbulb, Sparkles } from "lucide-react";
-import { SectionHeader } from "@/components/common/Header";
 
 export default function Mentoring() {
     return (
-        <div className="w-full max-w-6xl mx-auto p-6 space-y-6">
+        <div className="w-full max-w-6xl mx-auto p-6 space-y-6 animate-fadeSlideIn">
             {/* Header */}
             <div className="space-y-4">
                 <div className="flex items-center gap-3">

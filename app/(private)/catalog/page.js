@@ -6,16 +6,24 @@ import { NewTrackForm } from "@/components/forms/Catalog";
 import { EmptySection } from "@/components/common/Empty";
 import { catalogService } from "@/services/catalog";
 import { useQuery } from '@tanstack/react-query';
+import { userService } from "@/services/user";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-
 export default function Catalog() {
+    const router = useRouter();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingTrack, setEditingTrack] = useState(null);
 
     const { data, isLoading, error } = useQuery({
         queryKey: ['catalog'],
         queryFn: catalogService.getCatalog,
+    })
+
+    const { data: user } = useQuery({
+        queryKey: ['user'],
+        queryFn: userService.getMe,
     })
 
     const handleEdit = (track) => {
@@ -53,8 +61,7 @@ export default function Catalog() {
                             status={track.status}
                             price={track.suggested_price}
                             duration={`${Math.floor(parseInt(track.duration) / 60)}:${(parseInt(track.duration) % 60).toString().padStart(2, '0')}`}
-                            onViewPortfolio={() => console.log("Ver portfólio", track.id)}
-                            onCopyLink={() => console.log("Copiar link", track.id)}
+                            onViewPortfolio={() => router.push(`/portfolio/${user?.id}`)}
                             onEdit={() => handleEdit(track)}
                         />
                     ))}

@@ -43,7 +43,7 @@ export default function Library() {
     };
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen animate-fadeSlideIn">
             <div className="max-w-7xl mx-auto">
                 <SectionHeader
                     title="Biblioteca de Recursos"

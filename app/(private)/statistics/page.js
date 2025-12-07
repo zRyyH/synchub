@@ -47,7 +47,7 @@ export default function Statistics() {
     }
 
     return (
-        <div className="gap-4 flex flex-col">
+        <div className="gap-4 flex flex-col animate-fadeSlideIn">
             <SectionHeader
                 title="Estatísticas Avançadas"
                 description="Veja suas métricas"

@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { synchubService } from "@/services/synchub";
 import { useQuery } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
-import { PlayCircle } from "lucide-react";
+import { PlayCircle, X } from "lucide-react";
 import { useState } from "react";
 
 export function VideoLink() {
@@ -53,7 +53,17 @@ export function VideoLink() {
                 <DialogContent
                     className="bg-[#18181b] border-yellow-500/30 p-6"
                     style={{ width: '800px', maxWidth: '90vw', height: '600px', maxHeight: '90vh' }}
+                    showCloseButton={false}
                 >
+                    {/* Botão X branco customizado */}
+                    <button
+                        onClick={() => setIsModalOpen(false)}
+                        className="absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:ring-offset-2 focus:ring-offset-[#18181b]"
+                    >
+                        <X className="size-5 text-white" />
+                        <span className="sr-only">Fechar</span>
+                    </button>
+
                     <DialogHeader>
                         <DialogTitle className="text-white text-2xl">
                             Tutorial: Como usar o SyncHub

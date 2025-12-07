@@ -98,11 +98,6 @@ export function CatalogMusic({
                         <Eye className="h-4 w-4 mr-2" />
                         Ver no Portfólio
                     </Button>
-
-                    <Button variant="ghost" className="justify-start h-auto py-2 text-zinc-400 hover:text-white hover:bg-zinc-800" onClick={onCopyLink}>
-                        <Share2 className="h-4 w-4 mr-2" />
-                        Copiar Link Público
-                    </Button>
                 </div>
             </CardContent>
         </Card>
