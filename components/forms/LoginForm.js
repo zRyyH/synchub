@@ -44,8 +44,8 @@ export default function SyncHubLoginForm({
                         <Input
                             id="email"
                             type="email"
-                            placeholder="zryyh.br@gmail.com"
-                            className="h-11 border-zinc-800 bg-zinc-50 text-zinc-900 placeholder:text-zinc-500"
+                            placeholder="Digite seu endereço de email"
+                            className="h-11 border-zinc-800 bg-gray text-zinc-200 placeholder:text-zinc-500"
                             value={formData.email || ""}
                             onChange={(e) => handleChange("email", e.target.value)}
                             disabled={loading}
@@ -60,8 +60,8 @@ export default function SyncHubLoginForm({
                         <Input
                             id="password"
                             type="password"
-                            placeholder="••••••••••••"
-                            className="h-11 border-zinc-800 bg-zinc-50 text-zinc-900 placeholder:text-zinc-500"
+                            placeholder="Digite sua senha"
+                            className="h-11 border-zinc-800 text-zinc-200 placeholder:text-zinc-500"
                             value={formData.password || ""}
                             onChange={(e) => handleChange("password", e.target.value)}
                             disabled={loading}
@@ -69,16 +69,8 @@ export default function SyncHubLoginForm({
                         />
                     </div>
 
-                    <Button
-                        type="submit"
-                        className="h-11 w-full bg-yellow-500 text-zinc-900 hover:bg-yellow-600 font-medium"
-                        disabled={loading}
-                    >
-                        {loading ? "Entrando..." : "Entrar"}
-                    </Button>
-
                     {onForgotPassword && (
-                        <div className="flex justify-center pt-2">
+                        <div className="flex justify-end pt-2">
                             <Button
                                 type="button"
                                 variant="link"
@@ -90,6 +82,14 @@ export default function SyncHubLoginForm({
                             </Button>
                         </div>
                     )}
+                    <Button
+                        type="submit"
+                        className="h-11 w-full bg-yellow-500 text-zinc-900 hover:bg-yellow-600 font-medium"
+                        disabled={loading}
+                    >
+                        {loading ? "Entrando..." : "Entrar"}
+                    </Button>
+
                 </form>
             </CardContent>
         </Card>

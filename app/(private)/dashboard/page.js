@@ -16,7 +16,7 @@ export default function Dashboard() {
             />
 
             <VideoLink />
-            <MentoringSection />
+            {/* <MentoringSection /> */}
             <GoalSection />
             <StatisticsSection />
             <CatalogSection />
