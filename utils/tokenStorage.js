@@ -10,14 +10,14 @@ export const tokenStorage = {
     getAccessToken: () => {
         // Se estiver no navegador, busca o token no localStorage
         // Caso contrário (servidor), retorna null para evitar erros
-        return isBrowser ? localStorage.getItem('accessToken') : null;
+        return isBrowser ? localStorage.getItem('access_token') : null;
     },
 
     // Método para recuperar o token de atualização do armazenamento local
     getRefreshToken: () => {
         // Se estiver no navegador, busca o refresh token no localStorage
         // Caso contrário (servidor), retorna null
-        return isBrowser ? localStorage.getItem('refreshToken') : null;
+        return isBrowser ? localStorage.getItem('refresh_token') : null;
     },
 
     // Método para armazenar os tokens no localStorage
@@ -28,12 +28,12 @@ export const tokenStorage = {
         if (!isBrowser) return;
 
         // Armazena o token de acesso no localStorage
-        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('access_token', accessToken);
 
         // Se um refresh token foi fornecido, armazena-o também
         // A verificação evita armazenar valores undefined ou null
         if (refreshToken) {
-            localStorage.setItem('refreshToken', refreshToken);
+            localStorage.setItem('refresh_token', refreshToken);
         }
     },
 
@@ -44,9 +44,9 @@ export const tokenStorage = {
         if (!isBrowser) return;
 
         // Remove o token de acesso do localStorage
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem('access_token');
 
         // Remove o refresh token do localStorage
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('refresh_token');
     },
 };

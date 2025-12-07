@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MusicIcon } from "lucide-react";
@@ -11,7 +11,7 @@ export default function SyncHubLoginForm({
     setFormData,
     onSubmit,
     loading = false,
-    onSignUp
+    onForgotPassword
 }) {
     const handleChange = (field, value) => {
         setFormData({ ...formData, [field]: value });
@@ -35,7 +35,7 @@ export default function SyncHubLoginForm({
                 </div>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className="pb-8">
                 <form onSubmit={onSubmit} className="space-y-5">
                     <div className="space-y-2">
                         <Label htmlFor="email" className="text-sm text-white">
@@ -76,25 +76,22 @@ export default function SyncHubLoginForm({
                     >
                         {loading ? "Entrando..." : "Entrar"}
                     </Button>
+
+                    {onForgotPassword && (
+                        <div className="flex justify-center pt-2">
+                            <Button
+                                type="button"
+                                variant="link"
+                                className="h-auto p-0 text-sm text-zinc-400 hover:text-yellow-500"
+                                onClick={onForgotPassword}
+                                disabled={loading}
+                            >
+                                Esqueceu sua senha?
+                            </Button>
+                        </div>
+                    )}
                 </form>
             </CardContent>
-
-            {onSignUp && (
-                <CardFooter className="flex justify-center pb-8">
-                    <p className="text-sm text-zinc-400">
-                        Não tem uma conta?{" "}
-                        <Button
-                            type="button"
-                            variant="link"
-                            className="h-auto p-0 text-sm font-medium text-yellow-500 hover:text-yellow-400"
-                            onClick={onSignUp}
-                            disabled={loading}
-                        >
-                            Cadastre-se
-                        </Button>
-                    </p>
-                </CardFooter>
-            )}
         </Card>
     );
 }

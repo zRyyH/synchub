@@ -54,7 +54,17 @@ export default function FormManager({
     };
 
     const handleMutationError = (err, errorMessage) => {
-        const message = err?.message || errorMessage;
+        const status = err?.response?.status;
+        let message = errorMessage;
+
+        if (status === 401) {
+            message = "Email ou senha incorretos";
+        } else if (status === 403) {
+            message = "Acesso não autorizado";
+        } else if (err?.response?.data?.errors?.[0]?.message) {
+            message = err.response.data.errors[0].message;
+        }
+
         error("Erro", message);
     };
 
