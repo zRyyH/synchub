@@ -4,8 +4,17 @@ import FormManager from "@/components/forms/FormManager";
 import ResetPasswordForm from "@/components/forms/ResetPasswordForm";
 import { authService } from "@/services/auth";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function ResetPasswordPage() {
+    return (
+        <Suspense fallback={<div>Carregando...</div>}>
+            <ResetPasswordContent />
+        </Suspense>
+    );
+}
+
+function ResetPasswordContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
@@ -20,7 +29,6 @@ export default function ResetPasswordPage() {
         }, 2000);
     };
 
-    // Validação customizada antes de enviar
     const handleResetPassword = async (data) => {
         if (data.password !== data.confirmPassword) {
             throw new Error("As senhas não coincidem");

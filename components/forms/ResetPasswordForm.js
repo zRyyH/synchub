@@ -44,7 +44,7 @@ export default function ResetPasswordForm({
                         <Input
                             id="password"
                             type="password"
-                            placeholder="••••••••••••"
+                            placeholder="Senha"
                             className="h-11 border-zinc-800 bg-zinc-50 text-zinc-900 placeholder:text-zinc-500"
                             value={formData.password || ""}
                             onChange={(e) => handleChange("password", e.target.value)}
@@ -61,7 +61,7 @@ export default function ResetPasswordForm({
                         <Input
                             id="confirmPassword"
                             type="password"
-                            placeholder="••••••••••••"
+                            placeholder="Confirmar senha"
                             className="h-11 border-zinc-800 bg-zinc-50 text-zinc-900 placeholder:text-zinc-500"
                             value={formData.confirmPassword || ""}
                             onChange={(e) => handleChange("confirmPassword", e.target.value)}
