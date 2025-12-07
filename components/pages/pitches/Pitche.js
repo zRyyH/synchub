@@ -1,18 +1,25 @@
 "use client"
 
-import { Edit2, Trash2 } from "lucide-react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { NewPitchForm } from "@/components/forms/Pitche"
+import { pitcheService } from '@/services/pitches'
+import { catalogService } from '@/services/catalog'
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Edit2, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { pitcheService } from '@/services/pitches'
-import { NewPitch } from "@/components/forms/Pitche"
 
 export function PitcheCard({ pitch, className }) {
     const [openEdit, setOpenEdit] = useState(false)
+    const [formData, setFormData] = useState({})
     const queryClient = useQueryClient()
+
+    const { data: musicas = [] } = useQuery({
+        queryKey: ['catalog'],
+        queryFn: catalogService.getCatalog,
+    })
 
     const deleteMutation = useMutation({
         mutationFn: pitcheService.deletePitche,
@@ -21,7 +28,24 @@ export function PitcheCard({ pitch, className }) {
         }
     })
 
+    const updateMutation = useMutation({
+        mutationFn: (data) => pitcheService.updatePitche(pitch.id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['pitches'] })
+            setOpenEdit(false)
+        }
+    })
+
     const handleEdit = () => {
+        setFormData({
+            music: String(pitch.music?.id || pitch.music || ""),
+            contact: pitch.contact || "",
+            email: pitch.email || "",
+            shipping_date: pitch.shipping_date?.split('T')[0] || "",
+            status: pitch.status || "Aguardando",
+            type_of_opportunity: pitch.type_of_opportunity || "Sync (TV/Filme)",
+            observation: pitch.observation || "",
+        })
         setOpenEdit(true)
     }
 
@@ -29,6 +53,14 @@ export function PitcheCard({ pitch, className }) {
         if (confirm('Tem certeza que deseja excluir este pitch?')) {
             deleteMutation.mutate(pitch.id)
         }
+    }
+
+    const handleSetInput = (campo, valor) => {
+        setFormData(prev => ({ ...prev, [campo]: valor }))
+    }
+
+    const handleSalvar = () => {
+        updateMutation.mutate(formData)
     }
 
     const title = pitch?.music?.title || "Sem música"
@@ -92,7 +124,16 @@ export function PitcheCard({ pitch, className }) {
                 </CardContent>
             </Card>
 
-            <NewPitch open={openEdit} setOpen={setOpenEdit} pitchData={pitch} />
+            <NewPitchForm
+                open={openEdit}
+                onOpenChange={setOpenEdit}
+                data={formData}
+                setInput={handleSetInput}
+                onCancelar={() => setOpenEdit(false)}
+                onSalvar={handleSalvar}
+                loading={updateMutation.isPending}
+                musicaOptions={musicas}
+            />
         </>
     )
 }

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Music, Edit, Trash2, Eye, Share2 } from "lucide-react"
+import { Music, Edit2, Trash2, Eye } from "lucide-react"
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { catalogService } from "@/services/catalog"
 
@@ -17,7 +17,6 @@ export function CatalogMusic({
     price,
     duration,
     onViewPortfolio,
-    onCopyLink,
     onEdit
 }) {
     const queryClient = useQueryClient()
@@ -36,7 +35,9 @@ export function CatalogMusic({
     }
 
     const handleDelete = () => {
-        deleteMutation.mutate()
+        if (confirm('Tem certeza que deseja excluir esta música?')) {
+            deleteMutation.mutate()
+        }
     }
 
     return (
@@ -58,13 +59,15 @@ export function CatalogMusic({
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button size="icon" variant="ghost" className="h-9 w-9 text-zinc-400 hover:text-white hover:bg-zinc-800" onClick={handleEdit}>
-                        <Edit className="h-4 w-4" />
+                    <Button variant="default"
+                        size="icon"
+                        className="size-8 hover:bg-yellow-500/10 hover:text-yellow-500" onClick={handleEdit}>
+                        <Edit2 className="h-4 w-4" />
                     </Button>
                     <Button
+                        variant="default"
                         size="icon"
-                        variant="ghost"
-                        className="h-9 w-9 text-red-500 hover:text-red-400 hover:bg-red-950/50"
+                        className="size-8 hover:bg-yellow-500/10 hover:text-yellow-500"
                         onClick={handleDelete}
                         disabled={deleteMutation.isPending}
                     >

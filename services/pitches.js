@@ -15,11 +15,14 @@ export const pitcheService = {
         return data?.data
     },
     createPitche: async (pitcheData) => {
+        pitcheData.shipping_date = pitcheData.shipping_date === "" ? null : pitcheData.shipping_date
+        pitcheData.music = pitcheData.music === "" ? null : pitcheData.music
+
         const { data } = await directus.post(`/items/pitches`, pitcheData);
         return data?.data
     },
     updatePitche: async (id, pitcheData) => {
         const { data } = await directus.patch(`/items/pitches/${id}`, pitcheData);
         return data?.data
-    },
+    }
 };

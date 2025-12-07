@@ -1,10 +1,17 @@
 "use client"
 
-import * as React from "react"
-import { X } from "lucide-react"
+import { X, Loader2 } from "lucide-react"
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
     Select,
     SelectContent,
@@ -12,126 +19,90 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogTitle,
-} from "@/components/ui/dialog"
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { pitcheService } from '@/services/pitches'
-import { catalogService } from '@/services/catalog'
 
-export function NewPitch({ open, setOpen, pitchData }) {
-    const queryClient = useQueryClient()
+const defaultData = {
+    music: "",
+    contact: "",
+    email: "",
+    shipping_date: "",
+    status: "aguardando",
+    type_of_opportunity: "sync",
+    observation: "",
+}
 
-    const { data: catalog } = useQuery({
-        queryKey: ['catalog'],
-        queryFn: catalogService.getCatalog
-    })
+export function NewPitchForm({
+    open = true,
+    onOpenChange,
+    data = defaultData,
+    setInput,
+    onCancelar,
+    onSalvar,
+    loading = false,
+    musicaOptions = [],
+}) {
+    const formData = { ...defaultData, ...data }
 
-    const [formData, setFormData] = React.useState({
-        music: "",
-        contact: "",
-        email: "",
-        shipping_date: "",
-        status: "aguardando",
-        type_of_opportunity: "sync",
-        observation: ""
-    })
-
-    const createMutation = useMutation({
-        mutationFn: pitcheService.createPitche,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['pitches'] })
-            setOpen(false)
-        }
-    })
-
-    const updateMutation = useMutation({
-        mutationFn: ({ id, data }) => pitcheService.updatePitche(id, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['pitches'] })
-            setOpen(false)
-        }
-    })
-
-    React.useEffect(() => {
-        if (pitchData) {
-            setFormData({
-                music: pitchData.music || "",
-                contact: pitchData.contact || "",
-                email: pitchData.email || "",
-                shipping_date: pitchData.shipping_date ? new Date(pitchData.shipping_date).toISOString().split('T')[0] : "",
-                status: pitchData.status || "aguardando",
-                type_of_opportunity: pitchData.type_of_opportunity || "sync",
-                observation: pitchData.observation || ""
-            })
-        } else {
-            setFormData({
-                music: "",
-                contact: "",
-                email: "",
-                shipping_date: "",
-                status: "aguardando",
-                type_of_opportunity: "sync",
-                observation: ""
-            })
-        }
-    }, [pitchData, open])
-
-    const handleChange = (field, value) => {
-        setFormData(prev => ({ ...prev, [field]: value }))
-    }
-
-    const handleSubmit = () => {
-        if (pitchData?.id) {
-            updateMutation.mutate({ id: pitchData.id, data: formData })
-        } else {
-            createMutation.mutate(formData)
+    const handleChange = (campo, valor) => {
+        if (setInput) {
+            setInput(campo, valor)
         }
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={loading ? undefined : onOpenChange}>
             <DialogContent
-                className="sm:max-w-[680px] border-gray-800 bg-[#0f0f11] text-white"
+                className="max-w-[560px] border-[#18181b] bg-[#0f0f11] p-6"
                 showCloseButton={false}
             >
-                <div className="flex items-start justify-between mb-4">
-                    <div>
-                        <DialogTitle className="text-xl font-bold text-white mb-1">
-                            {pitchData?.id ? "Editar Pitch" : "Novo Pitch"}
-                        </DialogTitle>
-                        <DialogDescription className="text-gray-400 text-sm">
-                            {pitchData?.id ? "Atualize as informaÃ§Ãµes do pitch" : "Preencha os dados do pitch que vocÃª enviou"}
-                        </DialogDescription>
+                {loading && (
+                    <div className="absolute inset-0 z-50 flex items-center justify-center rounded-lg bg-[#0f0f11]/80 backdrop-blur-sm">
+                        <div className="flex flex-col items-center gap-3">
+                            <Loader2 className="h-8 w-8 animate-spin text-yellow-500" />
+                            <span className="text-sm text-zinc-400">Salvando...</span>
+                        </div>
                     </div>
-                    <button
-                        onClick={() => setOpen(false)}
-                        className="text-gray-400 hover:text-white transition-colors"
-                    >
-                        <X className="h-5 w-5" />
-                    </button>
-                </div>
+                )}
 
-                <div className="space-y-6 mt-6">
-                    {/* MÃºsica */}
+                <DialogHeader className="space-y-1">
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <DialogTitle className="text-xl font-semibold text-white">
+                                Novo Pitch
+                            </DialogTitle>
+                            <DialogDescription className="text-sm text-zinc-400">
+                                Registre um novo pitch enviado
+                            </DialogDescription>
+                        </div>
+                        <button
+                            className="text-zinc-400 transition-colors hover:text-white disabled:opacity-50"
+                            onClick={() => onOpenChange && onOpenChange(false)}
+                            disabled={loading}
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+                    </div>
+                </DialogHeader>
+
+                <div className="mt-6 space-y-5">
                     <div className="space-y-2">
-                        <Label htmlFor="music" className="text-white text-sm">
-                            MÃºsica <span className="text-[#f0b100]">*</span>
+                        <Label className="text-sm text-zinc-300">
+                            Música <span className="text-yellow-500">*</span>
                         </Label>
-                        <Select value={formData.music} onValueChange={(value) => handleChange("music", value)}>
-                            <SelectTrigger
-                                id="music"
-                                className="bg-[#18181b] border-gray-700 text-gray-400 h-12 rounded-lg focus:ring-[#f0b100] focus:border-[#f0b100]"
-                            >
+                        <Select
+                            value={formData.music}
+                            onValueChange={(valor) => handleChange("music", valor)}
+                            disabled={loading}
+                        >
+                            <SelectTrigger className="h-10 w-full border-[#18181b] bg-[#18181b] text-white focus:border-yellow-500 focus:ring-yellow-500/20 disabled:opacity-50 [&>span]:text-zinc-400 [&[data-state=open]>span]:text-white [&>span:not([data-placeholder])]:text-white">
                                 <SelectValue placeholder="Selecione uma música" />
                             </SelectTrigger>
-                            <SelectContent className="bg-[#18181b] border-gray-700">
-                                {catalog?.map((item) => (
-                                    <SelectItem key={item.id} value={item.id} className="text-white">
+                            <SelectContent className="border-[#18181b] bg-[#18181b]">
+                                {musicaOptions.map((item) => (
+                                    <SelectItem
+                                        key={item.id}
+                                        value={String(item.id)}
+                                        className="text-white focus:bg-yellow-500/20 focus:text-white"
+                                    >
                                         {item.title}
                                     </SelectItem>
                                 ))}
@@ -139,124 +110,146 @@ export function NewPitch({ open, setOpen, pitchData }) {
                         </Select>
                     </div>
 
-                    {/* Contato e Email */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="contact" className="text-white text-sm">
-                                Contato <span className="text-[#f0b100]">*</span>
+                            <Label className="text-sm text-zinc-300">
+                                Contato <span className="text-yellow-500">*</span>
                             </Label>
                             <Input
-                                id="contact"
+                                placeholder="Nome da pessoa/empresa"
                                 value={formData.contact}
                                 onChange={(e) => handleChange("contact", e.target.value)}
-                                className="bg-transparent border-2 border-gray-800 focus:border-[#f0b100] focus:ring-[#f0b100] text-white h-12 rounded-lg"
-                                placeholder="Nome da pessoa/empresa"
+                                disabled={loading}
+                                className="h-10 border-[#18181b] bg-[#18181b] text-white placeholder:text-zinc-500 focus-visible:border-yellow-500 focus-visible:ring-yellow-500/20 disabled:opacity-50"
                             />
                         </div>
-
                         <div className="space-y-2">
-                            <Label htmlFor="email" className="text-white text-sm">
-                                Email
-                            </Label>
+                            <Label className="text-sm text-zinc-300">Email</Label>
                             <Input
-                                id="email"
                                 type="email"
+                                placeholder="contato@exemplo.com"
                                 value={formData.email}
                                 onChange={(e) => handleChange("email", e.target.value)}
-                                className="bg-[#18181b] border-gray-700 focus:border-[#f0b100] focus:ring-[#f0b100] text-gray-400 h-12 rounded-lg"
-                                placeholder="contato@exemplo.com"
+                                disabled={loading}
+                                className="h-10 border-[#18181b] bg-[#18181b] text-white placeholder:text-zinc-500 focus-visible:border-yellow-500 focus-visible:ring-yellow-500/20 disabled:opacity-50"
                             />
                         </div>
                     </div>
 
-                    {/* Data de Envio e Status */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="shipping_date" className="text-white text-sm">
-                                Data de Envio <span className="text-[#f0b100]">*</span>
+                            <Label className="text-sm text-zinc-300">
+                                Data de Envio <span className="text-yellow-500">*</span>
                             </Label>
                             <Input
-                                id="shipping_date"
                                 type="date"
                                 value={formData.shipping_date}
                                 onChange={(e) => handleChange("shipping_date", e.target.value)}
-                                className="bg-[#18181b] border-gray-700 focus:border-[#f0b100] focus:ring-[#f0b100] text-white h-12 rounded-lg"
+                                disabled={loading}
+                                className="h-10 border-[#18181b] bg-[#18181b] text-white placeholder:text-zinc-500 focus-visible:border-yellow-500 focus-visible:ring-yellow-500/20 disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:invert"
                             />
                         </div>
-
                         <div className="space-y-2">
-                            <Label htmlFor="status" className="text-white text-sm">
-                                Status <span className="text-[#f0b100]">*</span>
+                            <Label className="text-sm text-zinc-300">
+                                Status <span className="text-yellow-500">*</span>
                             </Label>
-                            <Select value={formData.status} onValueChange={(value) => handleChange("status", value)}>
-                                <SelectTrigger
-                                    id="status"
-                                    className="bg-[#18181b] border-gray-700 text-white h-12 rounded-lg focus:ring-[#f0b100] focus:border-[#f0b100]"
-                                >
-                                    <SelectValue />
+                            <Select
+                                value={formData.status}
+                                onValueChange={(valor) => handleChange("status", valor)}
+                                disabled={loading}
+                            >
+                                <SelectTrigger className="h-10 w-full border-[#18181b] bg-[#18181b] text-white focus:border-yellow-500 focus:ring-yellow-500/20 disabled:opacity-50 [&>span]:text-zinc-400 [&[data-state=open]>span]:text-white [&>span:not([data-placeholder])]:text-white">
+                                    <SelectValue placeholder="Selecione" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-[#18181b] border-gray-700">
-                                    <SelectItem value="aguardando" className="text-white">Aguardando</SelectItem>
-                                    <SelectItem value="aprovado" className="text-white">Aprovado</SelectItem>
-                                    <SelectItem value="rejeitado" className="text-white">Rejeitado</SelectItem>
+                                <SelectContent className="border-[#18181b] bg-[#18181b]">
+                                    <SelectItem value="Aguardando" className="text-white focus:bg-yellow-500/20 focus:text-white">
+                                        Aguardando
+                                    </SelectItem>
+                                    <SelectItem value="Aceito" className="text-white focus:bg-yellow-500/20 focus:text-white">
+                                        Aceito
+                                    </SelectItem>
+                                    <SelectItem value="Rejeitado" className="text-white focus:bg-yellow-500/20 focus:text-white">
+                                        Rejeitado
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                     </div>
 
-                    {/* Tipo de Oportunidade */}
                     <div className="space-y-2">
-                        <Label htmlFor="type_of_opportunity" className="text-white text-sm">
-                            Tipo de Oportunidade
-                        </Label>
-                        <Select value={formData.type_of_opportunity} onValueChange={(value) => handleChange("type_of_opportunity", value)}>
-                            <SelectTrigger
-                                id="type_of_opportunity"
-                                className="bg-[#18181b] border-gray-700 text-gray-400 h-12 rounded-lg focus:ring-[#f0b100] focus:border-[#f0b100]"
-                            >
-                                <SelectValue />
+                        <Label className="text-sm text-zinc-300">Tipo de Oportunidade</Label>
+                        <Select
+                            value={formData.type_of_opportunity}
+                            onValueChange={(valor) => handleChange("type_of_opportunity", valor)}
+                            disabled={loading}
+                        >
+                            <SelectTrigger className="h-10 w-full border-[#18181b] bg-[#18181b] text-white focus:border-yellow-500 focus:ring-yellow-500/20 disabled:opacity-50 [&>span]:text-zinc-400 [&[data-state=open]>span]:text-white [&>span:not([data-placeholder])]:text-white">
+                                <SelectValue placeholder="Selecione" />
                             </SelectTrigger>
-                            <SelectContent className="bg-[#18181b] border-gray-700">
-                                <SelectItem value="sync" className="text-white">Sync (TV/Filme)</SelectItem>
-                                <SelectItem value="playlist" className="text-white">Playlist</SelectItem>
-                                <SelectItem value="radio" className="text-white">RÃ¡dio</SelectItem>
+                            <SelectContent className="border-[#18181b] bg-[#18181b]">
+                                <SelectItem value="Sync (TV/Filme)" className="text-white focus:bg-yellow-500/20 focus:text-white">
+                                    Sync (TV/Filme)
+                                </SelectItem>
+                                <SelectItem value="Biblioteca Musical" className="text-white focus:bg-yellow-500/20 focus:text-white">
+                                    Biblioteca Musical
+                                </SelectItem>
+                                <SelectItem value="Editora" className="text-white focus:bg-yellow-500/20 focus:text-white">
+                                    Editora
+                                </SelectItem>
+                                <SelectItem value="Gravadora" className="text-white focus:bg-yellow-500/20 focus:text-white">
+                                    Gravadora
+                                </SelectItem>
+                                <SelectItem value="Outro" className="text-white focus:bg-yellow-500/20 focus:text-white">
+                                    Outro
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
-                    {/* ObservaÃ§Ãµes */}
                     <div className="space-y-2">
-                        <Label htmlFor="observation" className="text-white text-sm">
-                            ObservaÃ§Ãµes
-                        </Label>
+                        <Label className="text-sm text-zinc-300">Observações</Label>
                         <Textarea
-                            id="observation"
+                            placeholder="Adicione observações sobre este pitch..."
                             value={formData.observation}
                             onChange={(e) => handleChange("observation", e.target.value)}
-                            className="bg-[#18181b] border-gray-700 focus:border-[#f0b100] focus:ring-[#f0b100] text-gray-400 h-32 rounded-lg resize-none"
-                            placeholder="Adicione observaÃ§Ãµes sobre este pitch..."
+                            disabled={loading}
+                            className="min-h-[100px] resize-none border-[#18181b] bg-[#18181b] text-white placeholder:text-zinc-500 focus-visible:border-yellow-500 focus-visible:ring-yellow-500/20 disabled:opacity-50"
                         />
                     </div>
+                </div>
 
-                    {/* BotÃµes */}
-                    <div className="flex items-center gap-3 pt-4">
-                        <Button
-                            variant="ghost"
-                            onClick={() => setOpen(false)}
-                            className="text-white hover:bg-gray-800"
-                        >
-                            Cancelar
-                        </Button>
-                        <Button
-                            onClick={handleSubmit}
-                            disabled={createMutation.isPending || updateMutation.isPending}
-                            className="bg-[#f0b100] text-black hover:bg-[#d99f00] font-semibold px-8"
-                        >
-                            {createMutation.isPending || updateMutation.isPending
-                                ? "Salvando..."
-                                : pitchData?.id ? "Atualizar Pitch" : "Criar Pitch"}
-                        </Button>
-                    </div>
+                <div className="mt-6 flex items-center justify-end gap-3">
+                    <Button
+                        variant="ghost"
+                        onClick={onCancelar}
+                        disabled={loading}
+                        className="h-10 px-4 text-zinc-300 hover:bg-[#18181b] hover:text-white disabled:opacity-50"
+                    >
+                        Cancelar
+                    </Button>
+                    <Button
+                        onClick={onSalvar}
+                        disabled={
+                            loading ||
+                            !formData.music ||
+                            !formData.contact ||
+                            !formData.email ||
+                            !formData.shipping_date ||
+                            !formData.status ||
+                            !formData.type_of_opportunity ||
+                            !formData.observation
+                        }
+                        className="h-10 bg-yellow-500 px-6 font-medium text-[#0f0f11] hover:bg-yellow-400 disabled:opacity-50"
+                    >
+                        {loading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Salvando...
+                            </>
+                        ) : (
+                            "Salvar"
+                        )}
+                    </Button>
                 </div>
             </DialogContent>
         </Dialog>
